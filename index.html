@@ -3529,6 +3529,292 @@ body {
   .practice-btn-label { font-size: 16px; }
 }
 
+/* ====================================================== */
+/* COMPREHENSIVE MOBILE RESPONSIVENESS PASS                 */
+/* ====================================================== */
+
+/* Prevent any horizontal scroll on the document */
+html, body { overflow-x: hidden; max-width: 100vw; }
+
+/* Tablets and below */
+@media (max-width: 900px) {
+  .topbar-inner { padding: 10px 16px; gap: 8px; flex-wrap: wrap; }
+  .brand { font-size: 16px; }
+  .brand-mark { width: 28px; height: 28px; font-size: 14px; }
+  .brand-sub { display: none; }
+  .progress-track { max-width: 100%; min-width: 80px; }
+  .progress-label { font-size: 11px; }
+  .weak-chip { font-size: 11px; padding: 4px 10px; }
+  .progress-reset { padding: 3px 8px; font-size: 10px; }
+
+  .hero { padding: 32px 18px 24px; }
+  .hero h1 { font-size: clamp(36px, 8vw, 56px); margin-bottom: 18px; }
+  .hero-eyebrow { font-size: 11px; margin-bottom: 16px; }
+  .hero-sub { font-size: 15px; }
+  .hero-meta { font-size: 12px; }
+
+  .toc-section { padding: 0 18px; margin: 28px auto 36px; }
+  .toc-grid { grid-template-columns: 1fr 1fr; }
+
+  .content { padding: 0 18px 48px; }
+  .section { margin-bottom: 56px; }
+  .section-header { gap: 16px; padding-bottom: 14px; margin-bottom: 22px; }
+  .section-num { font-size: 36px; }
+  .section h2 { font-size: clamp(22px, 5vw, 32px); }
+  .section-tag { font-size: 10px; }
+
+  .card { padding: 18px; }
+  .card h3 { font-size: 18px; }
+  .card h4 { font-size: 15px; }
+  .card p { font-size: 14px; }
+  .card ul, .card ol { padding-left: 18px; font-size: 14px; }
+
+  .formula { font-size: 14px; padding: 14px 16px; }
+  .formula-label { font-size: 10px; }
+  .definition { padding: 18px 20px; }
+  .definition-text { font-size: 16px; }
+  .definition::before { font-size: 48px; }
+
+  .cost-grid { grid-template-columns: 1fr; gap: 10px; }
+  .cost-tile { padding: 14px; }
+  .cost-tile h4 { font-size: 15px; }
+  .cost-tile-def { font-size: 12px; }
+
+  .quiz-block { padding: 16px; }
+  .quiz-question { font-size: 15px; }
+  .quiz-option { padding: 10px 12px; font-size: 13px; }
+
+  .worked-example { padding: 14px 16px; }
+  .worked-example-q { font-size: 14px; }
+  .worked-example-steps { font-size: 12px; padding: 10px 12px; overflow-x: auto; }
+
+  .compare-table { font-size: 12px; }
+  .compare-table th, .compare-table td { padding: 8px 10px; }
+
+  .flashcard-region { padding: 18px; }
+  .flashcard { padding: 22px 18px; min-height: 160px; }
+  .flashcard-question { font-size: 18px; }
+  .flashcard-answer { font-size: 14px; }
+
+  .master-quiz { padding: 28px 18px; }
+  .master-quiz h2 { font-size: 24px; }
+  .master-quiz-score { font-size: 56px; }
+
+  .mock-exam { padding: 26px 20px; }
+  .mock-exam h2 { font-size: 26px; }
+  .mock-stats { gap: 12px; padding: 8px 10px; }
+
+  .cheatsheet { padding: 22px 18px; }
+  .cheatsheet-title { font-size: 24px; }
+  .cheat-grid { grid-template-columns: 1fr; gap: 10px; }
+
+  .modal-content { max-height: calc(100vh - 24px); border-radius: 10px; }
+  .practice-modal, .tool-modal { padding: 12px; }
+  .modal-header { padding: 16px 18px; }
+  .modal-title { font-size: 18px; }
+  .modal-close { width: 32px; height: 32px; font-size: 18px; }
+  .modal-progress { padding: 10px 18px; }
+  .modal-body { padding: 18px; }
+
+  .mq-question { font-size: 16px; }
+  .mq-option { padding: 12px 14px; font-size: 13px; }
+  .mq-option-text { font-size: 13px; }
+
+  /* Mock exam tighter on mobile */
+  .exam-grid { grid-template-columns: 1fr; }
+  .exam-question-pane { padding: 18px 18px; }
+  .exam-q-text { font-size: 16px; }
+  .exam-question-grid { display: none; }   /* hide sidebar on phones */
+  .exam-header-bar { padding: 12px 16px; gap: 8px; }
+  .exam-timer { font-size: 18px; padding: 3px 10px; }
+  .exam-progress-text { font-size: 12px; }
+  .exam-submit-btn { padding: 6px 12px; font-size: 11px; }
+
+  /* Calculator and cash flow drawer */
+  .calc-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc-field input { font-size: 14px; padding: 4px 0; }
+  .factor-grid { grid-template-columns: 1fr; }
+  .calc-target-row { gap: 8px; }
+  .calc-target-pill { padding: 4px 10px; font-size: 12px; }
+
+  .cf-toolbar { padding: 10px; gap: 8px; }
+  .cf-mode-pill { padding: 5px 10px; font-size: 11px; }
+  .cf-saved-list { gap: 6px; }
+  .cf-saved-item-name { max-width: 110px; }
+
+  /* Lab widgets (CVP, decision-making) */
+  .lab-widget { padding: 16px; }
+  .lab-controls { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .lab-result-pane { gap: 8px; padding: 10px; }
+  .lab-result-value { font-size: 15px; }
+  .criteria-summary { grid-template-columns: 1fr; gap: 8px; }
+  .criteria-card { padding: 10px 12px; }
+  .risk-curves-grid { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; }
+
+  /* Tool launchers */
+  .practice-launcher { margin: 22px 0 10px; }
+  .practice-btn { padding: 16px 18px; }
+  .practice-btn-label { font-size: 15px; }
+  .practice-btn-meta { font-size: 12px; }
+  .tool-launcher { padding: 12px 14px; }
+  .tool-launcher-label { font-size: 14px; }
+  .tool-launcher-meta { font-size: 11px; }
+
+  /* Concept map: scale text up to remain readable */
+  .cm-node-text { font-size: 18px; }
+  .cm-node-text.center { font-size: 26px; }
+  .cm-node-tag { font-size: 14px; }
+  .cm-cluster-label { font-size: 14px; }
+  .concept-map-frame { padding: 18px; }
+  .concept-map-title { font-size: 18px; }
+  .concept-map-sub { font-size: 12px; }
+
+  /* Tool dock - smaller, lower z-index when nav drawer open */
+  .tool-dock { gap: 8px; bottom: 16px; left: 14px; }
+  .tool-fab { width: 46px; height: 46px; font-size: 17px; border-radius: 12px; }
+
+  /* Scroll-to-top button */
+  .scroll-top { width: 40px; height: 40px; bottom: 16px; right: 14px; }
+}
+
+/* Phones */
+@media (max-width: 600px) {
+  .topbar-inner { padding: 8px 12px; gap: 6px; }
+  .progress-reset { display: none; }   /* hide reset on tiny screens, accessible via menu */
+  .weak-chip-count { padding: 0 6px; }
+
+  .hero { padding: 24px 14px 20px; }
+  .hero h1 { font-size: clamp(32px, 9vw, 44px); line-height: 1.0; }
+  .hero-grid { gap: 24px; }
+  .hero-meta { font-size: 11px; padding-top: 18px; }
+
+  .toc-grid { grid-template-columns: 1fr; }
+  .toc-item { padding: 14px 16px; }
+  .toc-name { font-size: 13px; }
+
+  .section h2 em { font-style: italic; }
+  .section-num { font-size: 28px; line-height: 0.9; }
+
+  .card { padding: 16px; border-radius: 8px; }
+  .definition { padding: 14px 16px; }
+  .definition::before { font-size: 36px; left: 12px; top: -6px; }
+
+  /* Make nested grids stack on phones */
+  .section-grid.two-col { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr; gap: 6px; }
+
+  /* Tables and matrices: enable horizontal scroll wrappers */
+  .compare-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+  .compare-table thead, .compare-table tbody, .compare-table tr { display: table; width: 100%; table-layout: fixed; }
+
+  /* Worked example pre-text — shrink and allow scroll */
+  .worked-example-steps { font-size: 11px; padding: 10px 12px; overflow-x: auto; line-height: 1.6; }
+
+  /* Diagram frames (SVGs) - allow horizontal scroll if they overflow */
+  .diagram-frame { padding: 14px; overflow-x: auto; }
+
+  /* Concept map: even larger text on small phones since the SVG scales aggressively */
+  .cm-node-text { font-size: 22px; }
+  .cm-node-text.center { font-size: 30px; }
+  .cm-node-tag { font-size: 16px; }
+  .cm-cluster-label { font-size: 16px; }
+
+  /* Practice modal / tool modals */
+  .practice-modal, .tool-modal { padding: 8px; }
+  .modal-content { border-radius: 8px; }
+  .modal-header { padding: 14px 16px; gap: 10px; }
+  .modal-eyebrow { font-size: 10px; }
+  .modal-title { font-size: 16px; }
+  .modal-close { width: 30px; height: 30px; font-size: 16px; }
+  .modal-body { padding: 14px 16px; }
+  .modal-footer { padding: 12px 16px; gap: 6px; }
+  .mq-btn { padding: 8px 14px; font-size: 12px; min-height: 38px; }
+
+  /* Cheat sheet */
+  .cheat-item { padding: 14px 16px; }
+  .cheat-item-formula { font-size: 14px; }
+
+  /* Master quiz spacing */
+  .master-quiz-progress { font-size: 12px; }
+  .master-quiz-section-tag { display: block; margin-left: 0; margin-top: 6px; }
+
+  /* Calculator: stack to single column on tiny screens */
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-target-pills { gap: 4px; }
+  .calc-result-value { font-size: 22px; }
+
+  /* Cash flow drawer: tighter toolbar */
+  .cf-toolbar { flex-direction: column; align-items: stretch; }
+  .cf-toolbar-group { justify-content: space-between; }
+
+  /* Lab widget controls stack */
+  .lab-controls { grid-template-columns: 1fr; }
+  .lab-result-pane { grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; }
+  .lab-result-value { font-size: 14px; }
+  .lab-widget { padding: 14px; }
+
+  /* Payoff matrix - already wrapped in scroll container, just style smaller */
+  .payoff-matrix th, .payoff-matrix td { padding: 5px 6px; font-size: 11px; }
+  .payoff-matrix input { width: 50px; font-size: 12px; }
+
+  /* Footer */
+  .footer { padding: 36px 16px; }
+  .footer-text { font-size: 12px; }
+
+  /* Floating tool dock - reduce to keep clear of nav drawer */
+  .tool-dock { bottom: 12px; left: 10px; }
+  .tool-fab { width: 42px; height: 42px; font-size: 16px; }
+  .tool-fab-tip { display: none; }
+
+  /* Theme toggle - smaller */
+  .theme-toggle { width: 28px; height: 28px; font-size: 13px; }
+
+  /* Inline section flashcard rate buttons */
+  .fc-rate-btn { font-size: 11px; padding: 7px 12px; }
+  .fc-srs { gap: 4px; }
+  .fc-srs-btn { padding: 6px 8px; min-width: 60px; flex: 1 1 calc(50% - 4px); }
+  .fc-srs-btn .fc-srs-q { font-size: 12px; }
+
+  /* Help modal kbd table */
+  .kbd-table td { padding: 8px 0; font-size: 13px; }
+  .kbd-table td:first-child { width: 110px; }
+
+  /* Section "best score" badge in practice button */
+  .section-best-badge { font-size: 10px; padding: 2px 8px; }
+}
+
+/* Extra-small phones (≤ 380px) */
+@media (max-width: 380px) {
+  .brand { font-size: 14px; }
+  .brand-mark { width: 24px; height: 24px; }
+  .progress-label { display: none; }   /* free up space */
+  .weak-chip { font-size: 10px; padding: 3px 8px; }
+
+  .hero h1 { font-size: clamp(28px, 9vw, 38px); }
+  .section-num { font-size: 24px; }
+
+  .stat-box { padding: 8px 10px; }
+  .stat-value { font-size: 14px; }
+
+  /* Even tighter calc fields */
+  .calc-field input { font-size: 13px; }
+  .lab-result-pane { grid-template-columns: 1fr; }
+
+  /* Concept map: hide extra cluster labels */
+  .cm-cluster-label { display: none; }
+}
+
+/* Print stylesheet (already supports Ctrl+P) */
+@media print {
+  .topbar, .nav-overlay, .nav-drawer, .scroll-top, .tool-dock,
+  .practice-modal, .tool-modal, .practice-launcher,
+  .lab-widget, .flashcard-region, .quiz-block { display: none !important; }
+  body { background: white; color: black; }
+  .section { page-break-inside: avoid; margin-bottom: 24px; }
+  .card { border: 1px solid #ddd; box-shadow: none; }
+}
+
 </style>
 </head>
 <body>
@@ -5894,6 +6180,7 @@ CV_A > CV_B</div>
       </div>
     </div>
 
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px;">
     <table class="payoff-matrix" id="payoffMatrix">
       <thead>
         <tr>
@@ -5944,6 +6231,7 @@ CV_A > CV_B</div>
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="criteria-summary" id="criteriaSummary">
       <div class="criteria-card"><div class="criteria-name">Laplace</div><div class="criteria-pick" data-summary="laplace">—</div><div class="criteria-detail" data-summary-detail="laplace"></div></div>
