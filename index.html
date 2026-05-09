@@ -1996,6 +1996,74 @@ body {
 .scroll-top.show { display: flex; }
 .scroll-top:hover { transform: translateY(-2px); }
 
+/* ============ FLOATING ACTION BUTTONS (always visible) ============ */
+.float-fabs {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 51;
+}
+.float-fab {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--emerald-deep);
+  color: var(--brass-soft);
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--shadow-lg);
+  font-size: 18px;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.float-fab:hover {
+  background: var(--brass);
+  color: var(--emerald-deep);
+  transform: translateY(-2px);
+}
+.float-fab.menu { background: var(--brass); color: var(--emerald-deep); }
+.float-fab.menu:hover { background: var(--brass-light); }
+[data-theme="dark"] .float-fab { background: var(--emerald); color: var(--brass-soft); }
+[data-theme="dark"] .float-fab:hover { background: var(--brass-light); color: var(--emerald-deep); }
+[data-theme="dark"] .float-fab.menu { background: var(--brass-light); color: var(--emerald-deep); }
+.float-fab-tip {
+  position: absolute;
+  right: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ink);
+  color: var(--parchment);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.float-fab:hover .float-fab-tip { opacity: 1; }
+
+@media (max-width: 600px) {
+  .float-fabs { bottom: 16px; right: 16px; gap: 8px; }
+  .float-fab { width: 44px; height: 44px; font-size: 16px; }
+  .float-fab-tip { display: none; }
+}
+
+/* Move scroll-top to make room for the floating fabs */
+@media (min-width: 0) {
+  .scroll-top { bottom: 184px; }
+}
+@media (max-width: 600px) {
+  .scroll-top { bottom: 168px; right: 16px; width: 40px; height: 40px; }
+}
+
 /* ============ FLOATING TOOL DOCK ============ */
 .tool-dock {
   position: fixed;
@@ -6749,12 +6817,35 @@ Required units:
 <!-- ========== FOOTER ========== -->
 <footer class="footer">
   <div class="footer-mark">— ECN 451 —</div>
-  <div class="footer-text">Built for Johnpaul · Engineering Economics · UNILAG · {{ Press Ctrl+P / ⌘P to print this companion as PDF }}</div>
+  <div class="footer-text">Engineering Economics · UNILAG · 2025/26</div>
+  <div class="footer-text" style="margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px;">
+    <strong style="color: var(--brass); font-style: normal; font-family: 'Fraunces', serif;">Developed by Johnpaul Okeke</strong>
+    <br>
+    <a href="mailto:okekejohnpaul12@gmail.com" style="color: var(--ink-soft); text-decoration: none; font-style: normal;">okekejohnpaul12@gmail.com</a>
+    <br>
+    <span style="color: var(--ink-soft); font-size: 11px; opacity: 0.7;">Press Ctrl+P / ⌘P to print this companion as PDF</span>
+  </div>
 </footer>
 
 </main>
 
 <button class="scroll-top" id="scrollTop" aria-label="Back to top">↑</button>
+
+<!-- ============ ALWAYS-VISIBLE FLOATING BUTTONS ============ -->
+<div class="float-fabs">
+  <button class="float-fab menu" id="floatMenu" type="button" aria-label="Open section menu">
+    ☰
+    <span class="float-fab-tip">Menu (M)</span>
+  </button>
+  <button class="float-fab" id="floatTheme" type="button" aria-label="Toggle dark mode">
+    ☾
+    <span class="float-fab-tip">Theme (T)</span>
+  </button>
+  <button class="float-fab" id="floatHelp" type="button" aria-label="Show keyboard shortcuts">
+    ?
+    <span class="float-fab-tip">Help</span>
+  </button>
+</div>
 
 <!-- ============ FLOATING TOOL DOCK ============ -->
 <div class="tool-dock">
@@ -7390,6 +7481,12 @@ const ThemeMgr = (() => {
     else root.removeAttribute('data-theme');
     if (btn) btn.textContent = mode === 'dark' ? '☀' : '☾';
     if (btn) btn.title = mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    // Keep the floating theme button in sync
+    const floatBtn = document.getElementById('floatTheme');
+    if (floatBtn) {
+      if (floatBtn.firstChild) floatBtn.firstChild.nodeValue = mode === 'dark' ? '☀' : '☾';
+      floatBtn.title = mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode';
+    }
   }
   function set(mode) { Store.set(KEY, mode); apply(mode); }
   function toggle() {
@@ -9344,6 +9441,33 @@ const NavDrawer = (() => {
     progressFill.parentElement.addEventListener('click', open);
   }
   if (progressLabel) progressLabel.addEventListener('click', open);
+
+  // Floating menu button (always-visible)
+  const floatMenuBtn = document.getElementById('floatMenu');
+  if (floatMenuBtn) floatMenuBtn.addEventListener('click', open);
+
+  // Floating theme toggle button
+  const floatThemeBtn = document.getElementById('floatTheme');
+  if (floatThemeBtn) {
+    floatThemeBtn.addEventListener('click', () => {
+      if (typeof ThemeMgr !== 'undefined') ThemeMgr.toggle();
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (floatThemeBtn.firstChild) floatThemeBtn.firstChild.nodeValue = isDark ? '☀' : '☾';
+    });
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if (floatThemeBtn.firstChild) floatThemeBtn.firstChild.nodeValue = isDark ? '☀' : '☾';
+  }
+
+  // Floating help (?) button
+  const floatHelpBtn = document.getElementById('floatHelp');
+  if (floatHelpBtn) floatHelpBtn.addEventListener('click', () => {
+    const m = document.getElementById('kbdHelpModal');
+    if (m) {
+      document.querySelectorAll('.tool-modal.open, .practice-modal.open').forEach(x => x.classList.remove('open'));
+      m.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  });
 
   // Search and filters
   if (search) search.addEventListener('input', () => {
