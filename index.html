@@ -1996,6 +1996,132 @@ body {
 .scroll-top.show { display: flex; }
 .scroll-top:hover { transform: translateY(-2px); }
 
+/* ============ AUDIO TRANSCRIPT (Web Speech API) ============ */
+.listen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brass-soft);
+  color: var(--emerald-deep);
+  border: 1px solid var(--brass);
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  letter-spacing: 0.02em;
+  transition: all 0.15s ease;
+}
+.listen-btn:hover { background: var(--brass); color: var(--parchment); transform: translateY(-1px); }
+.listen-btn.playing {
+  background: var(--brass);
+  color: var(--parchment);
+  animation: listenPulse 1.4s ease-in-out infinite;
+}
+@keyframes listenPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(184, 144, 47, 0.5); }
+  50% { box-shadow: 0 0 0 8px rgba(184, 144, 47, 0); }
+}
+[data-theme="dark"] .listen-btn { background: rgba(184, 144, 47, 0.2); color: var(--brass-light); border-color: var(--brass); }
+[data-theme="dark"] .listen-btn:hover { background: var(--brass); color: var(--ink); }
+[data-theme="dark"] .listen-btn.playing { background: var(--brass); color: var(--ink); }
+
+.audio-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--emerald-deep);
+  color: var(--parchment);
+  padding: 14px 20px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  z-index: 200;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.25);
+  font-family: 'DM Sans', sans-serif;
+  flex-wrap: wrap;
+}
+.audio-bar.show { display: flex; }
+.audio-bar-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--brass-light);
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.audio-bar-controls {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.audio-btn {
+  background: rgba(250, 246, 237, 0.1);
+  color: var(--parchment);
+  border: 1px solid rgba(250, 246, 237, 0.2);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  transition: all 0.15s ease;
+  font-family: inherit;
+}
+.audio-btn:hover { background: var(--brass); color: var(--emerald-deep); border-color: var(--brass); }
+.audio-btn.primary { background: var(--brass); color: var(--emerald-deep); border-color: var(--brass); width: 40px; height: 40px; font-size: 15px; }
+.audio-btn.primary:hover { background: var(--brass-light); }
+
+.audio-progress {
+  flex: 1 1 120px;
+  min-width: 80px;
+  height: 5px;
+  background: rgba(250, 246, 237, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.audio-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass), var(--brass-light));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.audio-select {
+  background: rgba(250, 246, 237, 0.1);
+  color: var(--parchment);
+  border: 1px solid rgba(250, 246, 237, 0.2);
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  outline: none;
+  max-width: 160px;
+}
+.audio-select:focus { border-color: var(--brass); }
+
+@media (max-width: 600px) {
+  .audio-bar { padding: 10px 12px; gap: 8px; }
+  .audio-bar-title { font-size: 12px; flex-basis: 100%; }
+  .audio-bar-controls { flex-wrap: wrap; }
+  .audio-btn { width: 34px; height: 34px; font-size: 13px; }
+  .audio-btn.primary { width: 38px; height: 38px; font-size: 14px; }
+  .audio-progress { flex-basis: 100%; }
+  .audio-select { font-size: 11px; padding: 5px 6px; max-width: 110px; }
+}
+
+body.audio-active { padding-bottom: 80px; }
+@media (max-width: 600px) { body.audio-active { padding-bottom: 140px; } }
+
 /* ============ FLOATING ACTION BUTTONS (always visible) ============ */
 .float-fabs {
   position: fixed;
@@ -3959,7 +4085,7 @@ html, body { overflow-x: hidden; max-width: 100vw; }
     <div class="hero-meta">
       <strong>Course Pack</strong>
       Notes by Jennifer<br>
-      Final Year, Biomed Eng.<br>
+      Final Year, BioMed Eng.<br>
       UNILAG · 2025<br><br>
       <strong>Built around</strong>
       20 topic sections<br>
@@ -6831,6 +6957,29 @@ Required units:
 
 <button class="scroll-top" id="scrollTop" aria-label="Back to top">↑</button>
 
+<!-- ============ AUDIO PLAYBACK BAR ============ -->
+<div class="audio-bar" id="audioBar" role="region" aria-label="Audio narration">
+  <div class="audio-bar-title" id="audioBarTitle">Listening to: —</div>
+  <div class="audio-bar-controls">
+    <button class="audio-btn" id="audioPrev" type="button" title="Previous sentence" aria-label="Previous sentence">⏮</button>
+    <button class="audio-btn primary" id="audioPlayPause" type="button" title="Pause" aria-label="Play / pause">⏸</button>
+    <button class="audio-btn" id="audioNext" type="button" title="Next sentence" aria-label="Next sentence">⏭</button>
+    <button class="audio-btn" id="audioStop" type="button" title="Stop" aria-label="Stop">⏹</button>
+  </div>
+  <div class="audio-progress" title="Reading progress"><div class="audio-progress-bar" id="audioProgressBar"></div></div>
+  <select class="audio-select" id="audioSpeed" title="Playback speed">
+    <option value="0.75">0.75×</option>
+    <option value="0.9">0.9×</option>
+    <option value="1" selected>1× (normal)</option>
+    <option value="1.15">1.15×</option>
+    <option value="1.3">1.3×</option>
+    <option value="1.5">1.5×</option>
+    <option value="1.75">1.75×</option>
+    <option value="2">2×</option>
+  </select>
+  <select class="audio-select" id="audioVoice" title="Voice"></select>
+</div>
+
 <!-- ============ ALWAYS-VISIBLE FLOATING BUTTONS ============ -->
 <div class="float-fabs">
   <button class="float-fab menu" id="floatMenu" type="button" aria-label="Open section menu">
@@ -9544,6 +9693,216 @@ const NavDrawer = (() => {
   });
 
   return { open, close, toggle, rebuild };
+})();
+
+// =========== AUDIO TRANSCRIPT (Web Speech API) ===========
+const AudioNarrator = (() => {
+  if (!('speechSynthesis' in window)) {
+    console.warn('Speech synthesis unavailable in this browser.');
+    return { speak: () => {}, stop: () => {} };
+  }
+
+  const synth = window.speechSynthesis;
+  synth.cancel();
+
+  const bar         = document.getElementById('audioBar');
+  const titleEl     = document.getElementById('audioBarTitle');
+  const playPauseBtn = document.getElementById('audioPlayPause');
+  const stopBtn     = document.getElementById('audioStop');
+  const prevBtn     = document.getElementById('audioPrev');
+  const nextBtn     = document.getElementById('audioNext');
+  const progressBar = document.getElementById('audioProgressBar');
+  const speedSel    = document.getElementById('audioSpeed');
+  const voiceSel    = document.getElementById('audioVoice');
+
+  let voices = [];
+  let preferredVoiceURI = (typeof Store !== 'undefined') ? Store.get('audio:voice', null) : null;
+  let preferredRate = (typeof Store !== 'undefined') ? parseFloat(Store.get('audio:rate', '1')) : 1;
+  if (speedSel) speedSel.value = String(preferredRate);
+
+  let chunks = [];
+  let cursor = 0;
+  let isPlaying = false;
+  let isPaused = false;
+  let currentSectionId = null;
+  let watchdogId = null;
+
+  function loadVoices() {
+    voices = synth.getVoices();
+    const english = voices.filter(v => /^en/i.test(v.lang));
+    const ranked = english.slice().sort((a, b) => {
+      const aQ = /premium|enhanced|neural|natural|google|microsoft/i.test(a.name) ? 1 : 0;
+      const bQ = /premium|enhanced|neural|natural|google|microsoft/i.test(b.name) ? 1 : 0;
+      return bQ - aQ;
+    });
+    voices = ranked;
+    if (!voiceSel) return;
+    voiceSel.innerHTML = voices.map(v =>
+      `<option value="${v.voiceURI}">${v.name.replace(/Microsoft\s+|Google\s+/, '')} · ${v.lang}</option>`
+    ).join('');
+    // Pick a default: saved preference > Nicky en-US > any en-US > first listed
+    let chosen = null;
+    if (preferredVoiceURI) {
+      chosen = voices.find(v => v.voiceURI === preferredVoiceURI);
+    }
+    if (!chosen) {
+      chosen = voices.find(v => /^nicky$/i.test(v.name) && /en[-_]US/i.test(v.lang))
+            || voices.find(v => /nicky/i.test(v.name) && /en[-_]US/i.test(v.lang))
+            || voices.find(v => /nicky/i.test(v.name));
+    }
+    if (!chosen) {
+      chosen = voices.find(v => /en[-_]US/i.test(v.lang));
+    }
+    if (!chosen && voices.length) chosen = voices[0];
+    if (chosen) voiceSel.value = chosen.voiceURI;
+  }
+
+  loadVoices();
+  if (synth.onvoiceschanged !== undefined) synth.onvoiceschanged = loadVoices;
+
+  function showBar(title) {
+    if (bar) bar.classList.add('show');
+    if (titleEl) titleEl.textContent = '🔊 Listening to: ' + title;
+    document.body.classList.add('audio-active');
+    if (playPauseBtn) playPauseBtn.textContent = '⏸';
+  }
+  function hideBar() {
+    if (bar) bar.classList.remove('show');
+    document.body.classList.remove('audio-active');
+    document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
+    if (progressBar) progressBar.style.width = '0%';
+  }
+
+  function extractText(section) {
+    const clone = section.cloneNode(true);
+    clone.querySelectorAll(
+      '.flashcard-region, .quiz-block, .practice-launcher, .tool-launcher, ' +
+      '.checkbox-section, .lab-widget, .listen-btn, table.payoff-matrix, ' +
+      '.diagram-frame, button, input, select'
+    ).forEach(el => el.remove());
+
+    let text = clone.textContent
+      .replace(/\s+/g, ' ')
+      .replace(/₦/g, 'Naira ')
+      .replace(/\$/g, 'dollars ')
+      .replace(/Rs\./g, 'Rupees ')
+      .replace(/[•·]/g, '. ')
+      .replace(/—/g, ', ')
+      .replace(/&\w+;/g, ' ')
+      .trim();
+
+    const sentences = text.match(/[^.!?…]+[.!?…]+(?:\s|$)/g) || [text];
+    return sentences.map(s => s.trim()).filter(Boolean);
+  }
+
+  function speakNext() {
+    if (!isPlaying) return;
+    if (cursor >= chunks.length) { stop(); return; }
+    const sentence = chunks[cursor];
+    const u = new SpeechSynthesisUtterance(sentence);
+    u.rate = parseFloat(speedSel?.value || '1');
+    u.pitch = 1; u.volume = 1;
+    const voiceURI = voiceSel?.value;
+    const voice = voices.find(v => v.voiceURI === voiceURI);
+    if (voice) u.voice = voice;
+    u.onend = () => {
+      cursor++;
+      updateProgress();
+      setTimeout(() => speakNext(), 30);
+    };
+    u.onerror = (e) => {
+      if (e.error && !/cancel|interrupt/i.test(e.error)) {
+        console.warn('Speech error:', e.error);
+        stop();
+      }
+    };
+    synth.speak(u);
+  }
+
+  function startWatchdog() {
+    if (watchdogId) clearInterval(watchdogId);
+    watchdogId = setInterval(() => {
+      if (isPlaying && !isPaused && synth.speaking && !synth.paused) {
+        synth.pause(); synth.resume();
+      }
+    }, 10000);
+  }
+  function stopWatchdog() { if (watchdogId) { clearInterval(watchdogId); watchdogId = null; } }
+
+  function updateProgress() {
+    if (!progressBar) return;
+    progressBar.style.width = (chunks.length ? cursor / chunks.length * 100 : 0) + '%';
+  }
+
+  function speakSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    stop();
+    const sentences = extractText(section);
+    if (!sentences.length) return;
+    chunks = sentences; cursor = 0;
+    isPlaying = true; isPaused = false;
+    currentSectionId = sectionId;
+    const title = section.querySelector('h2')?.textContent.trim() || sectionId;
+    showBar(title);
+    startWatchdog();
+    speakNext();
+  }
+
+  function pause() { if (!isPlaying || isPaused) return; synth.pause(); isPaused = true; if (playPauseBtn) playPauseBtn.textContent = '▶'; }
+  function resume() { if (!isPlaying || !isPaused) return; synth.resume(); isPaused = false; if (playPauseBtn) playPauseBtn.textContent = '⏸'; }
+  function stop() {
+    synth.cancel();
+    isPlaying = false; isPaused = false; cursor = 0; chunks = []; currentSectionId = null;
+    stopWatchdog(); hideBar();
+  }
+  function nextSentence() { if (!isPlaying) return; synth.cancel(); cursor++; speakNext(); }
+  function prevSentence() { if (!isPlaying) return; synth.cancel(); cursor = Math.max(0, cursor - 2); speakNext(); }
+
+  document.querySelectorAll('[data-section]').forEach(section => {
+    const titleBlock = section.querySelector('.section-title-block');
+    if (!titleBlock) return;
+    if (titleBlock.querySelector('.listen-btn')) return;
+    const btn = document.createElement('button');
+    btn.className = 'listen-btn';
+    btn.dataset.section = section.id;
+    btn.type = 'button';
+    btn.title = 'Read this section aloud (AI voice)';
+    btn.innerHTML = '<span aria-hidden="true">🔊</span> Listen';
+    titleBlock.appendChild(btn);
+  });
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.listen-btn');
+    if (!btn) return;
+    const sid = btn.dataset.section;
+    if (isPlaying && currentSectionId === sid) {
+      stop();
+    } else {
+      document.querySelectorAll('.listen-btn.playing').forEach(b => b.classList.remove('playing'));
+      btn.classList.add('playing');
+      speakSection(sid);
+    }
+  });
+
+  if (playPauseBtn) playPauseBtn.addEventListener('click', () => isPaused ? resume() : pause());
+  if (stopBtn)     stopBtn.addEventListener('click', stop);
+  if (nextBtn)     nextBtn.addEventListener('click', nextSentence);
+  if (prevBtn)     prevBtn.addEventListener('click', prevSentence);
+
+  if (speedSel) speedSel.addEventListener('change', () => {
+    if (typeof Store !== 'undefined') Store.set('audio:rate', speedSel.value);
+    if (isPlaying) { synth.cancel(); cursor = Math.max(0, cursor); speakNext(); }
+  });
+  if (voiceSel) voiceSel.addEventListener('change', () => {
+    if (typeof Store !== 'undefined') Store.set('audio:voice', voiceSel.value);
+    if (isPlaying) { synth.cancel(); speakNext(); }
+  });
+
+  window.addEventListener('beforeunload', stop);
+  window.addEventListener('pagehide', stop);
+
+  return { speak: speakSection, pause, resume, stop };
 })();
 
 // =========== KEYBOARD SHORTCUTS ===========
